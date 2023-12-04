@@ -18,24 +18,17 @@ class Card:
         cards_set = set(self.cards)
         return list(winning_set&cards_set)
 
-
-
 def parse_data() -> list[Card]:
     raw_data = read_file()
-    cards = []
-    for raw_card in raw_data:
-        raw_split_card = raw_card.split(":")
-        cid: int = int(raw_split_card[0].split(" ")[-1])
-        raw_cards_sec = raw_split_card[1].split("|")
-        cards.append(
-            Card(
-                cid,
-                [int(i) for i in raw_cards_sec[0].split(" ") if i.isdigit()],
-                [int(i) for i in raw_cards_sec[1].split(" ") if i.isdigit()],
-            )
+    cards = [
+        Card(
+            int(raw_card.split(":")[0].split(" ")[-1]),
+            [int(i) for i in raw_card.split(":")[1].split("|")[0].split() if i.isdigit()],
+            [int(i) for i in raw_card.split(":")[1].split("|")[1].split() if i.isdigit()]
         )
+        for raw_card in raw_data
+    ]
     return cards
-
 
 def part1():
     cards = parse_data()
